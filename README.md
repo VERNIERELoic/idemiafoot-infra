@@ -3,16 +3,16 @@
 
 ## Prepare your VMs
 
-###  -   Update your system
+-   Update your system
 ```shell
 sudo apt update && sudo apt upgrade -y
 ```
-### -   Install dependencies
+-   Install dependencies
 ```shell
 sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
 
 ```
-###  - Disable ufw, iptable (default on OCI Cloud ubuntu instance)
+- Disable ufw, iptable (default on OCI Cloud ubuntu instance)
 ```shell
 sudo systemctl stop ufw.service 
 sudo systemctl disable ufw.service 
