@@ -12,14 +12,14 @@ sudo apt update && sudo apt upgrade -y
 sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
 
 ```
-- Disable ufw, iptable (default on OCI Cloud ubuntu instance)
+- Disable ufw, iptable (Enabled by default on OCI Cloud ubuntu instance)
 ```shell
 sudo systemctl stop ufw.service 
 sudo systemctl disable ufw.service 
 sudo apt remove iptables-persistent
 sudo ufw disable
 ```
-to verify you can access the other vms, start python3 simple web server and try to curl it:
+to verify you can access the other vms, start simple python3 web server and try to curl it:
 ```shell
 #On agent:
 python3 -m http.server 9000
