@@ -1,0 +1,90 @@
+version: "3.3"
+
+services:
+  db-idemiafoot:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_AUTHENTICATION_PLUGIN: caching_sha2_password
+    volumes:
+      - idemiafoot-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  minio:
+    image: minio/minio
+    volumes:
+      - ./data:/data
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESSKEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRETKEY}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.minio.rule=Host(`s3.foot-idemia.fr`)"
+      - "traefik.http.routers.minio.entrypoints=websecure"
+      - "traefik.http.routers.minio.tls.certresolver=letsencryptresolver"
+      - "traefik.http.routers.minio.service=minio-service"
+      - "traefik.http.services.minio-service.loadbalancer.server.port=9000"
+    command: server /data
+    ports:
+      - "9000:9000"
+
+  idemiafoot-back:
+    depends_on:
+      - db-idemiafoot
+      - minio
+    image: loicverniere/idemiafoot-back:main
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock 
+    env_file:
+      - .env
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      REFRESH_TOKEN: ${REFRESH_TOKEN}
+      EMAIL: ${EMAIL}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.idemiafoot-back.rule=Host(`api.foot-idemia.fr`)"
+      - "traefik.http.routers.idemiafoot-back.entrypoints=websecure"
+      - "traefik.http.routers.idemiafoot-back.tls.certresolver=letsencryptresolver"
+      - "traefik.http.routers.idemiafoot-back.service=idemiafoot-service"
+      - "traefik.http.services.idemiafoot-service.loadbalancer.server.port=3000"
+
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.address=:80"
+      - "--certificatesresolvers.letsencryptresolver.acme.httpChallenge=true"
+      - "--certificatesresolvers.letsencryptresolver.acme.httpChallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencryptresolver.acme.email=foot.idemia@gmail.com"
+      - "--certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  idemiafoot-data:
