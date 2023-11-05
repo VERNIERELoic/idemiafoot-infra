@@ -1,0 +1,26 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: http-to-https-redirect
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: '!PathPrefix(`/.well-known/acme-challenge/`)'
+      priority: 1
+      middlewares:
+        - name: redirect-https
+      services:
+        - kind: TraefikService
+          name: noop@internal
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-https
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true

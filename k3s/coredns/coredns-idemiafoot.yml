@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  custom.server: |
+    *.foot-idemia.fr {
+        log
+        rewrite name regex (.*)\.foot-idemia\.fr\.$ traefik.traefik.svc.cluster.local
+        forward . 127.0.0.1
+    }
+  log.override: |
+    log
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system

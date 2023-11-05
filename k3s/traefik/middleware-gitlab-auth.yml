@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: traefik-forward-auth
+  name: traefik-forward-auth
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik-forward-auth
+  template:
+    metadata:
+      labels:
+        app: traefik-forward-auth
+    spec:
+      containers:
+        - name: traefik-forward-auth
+          image: thomseddon/traefik-forward-auth:latest
+          ports:
+            - containerPort: 4181
+              protocol: TCP
+          env:
+            - name: DEFAULT_PROVIDER
+              value: "oidc"
+            - name: PROVIDERS_OIDC_ISSUER_URL
+              value: "https://gitlab.piman-digital.com"
+            - name: PROVIDERS_OIDC_CLIENT_ID
+              value: "9d5453ff62dde24d5d415d81f09ac36494146159dad45751e53ceec8bb67d9d6"
+            - name: PROVIDERS_OIDC_CLIENT_SECRET
+              value: "7ac6129fcdc184ed87f77a4fa30305a87788983101e257f1ce7b1ba60f69cd28"
+            - name: SECRET
+              value: "SuperSecretP@ssword!!"
+            - name: COOKIE_DOMAIN
+              value: piman-digital.fr
+            - name: AUTH_HOST
+              value: auth.dev.piman-digital.fr
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: traefik-forward-auth
+  namespace: default
+spec:
+  selector:
+    app: traefik-forward-auth
+  ports:
+    - name: http
+      port: 80
+      targetPort: 4181
+      protocol: TCP
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-forward-auth
+  labels:
+    app: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`auth.dev.piman-digital.fr`)
+    kind: Rule
+    services:
+    - name: traefik-forward-auth
+      port: 80
+  tls:
+    secretName: auth.dev.piman-digital.fr
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: auth.dev.piman-digital.fr
+spec:
+  secretName: auth.dev.piman-digital.fr
+  issuerRef:
+    name: acme-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - 'auth.dev.piman-digital.fr'
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: gitlab-auth
+  namespace: default
+spec:
+  forwardAuth:
+    address: http://traefik-forward-auth
+    authResponseHeaders:
+      - X-Forwarded-User

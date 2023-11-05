@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: idemiafoot
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - image: loicverniere/idemiafoot-front:dev
+          name: frontend
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: idemiafoot
+spec:
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: frontend-ingressroute
+  namespace: idemiafoot
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`dev.foot-idemia.fr`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: frontend-service
+          port: 80
+  tls:
+    secretName: frontend-tls

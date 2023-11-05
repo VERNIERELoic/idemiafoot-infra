@@ -1,0 +1,6 @@
+additionalArguments:
+  - "--serverstransport.insecureskipverify=true"
+  - "--log.level=DEBUG"
+  - "--providers.kubernetescrd.allowCrossNamespace=true"
+
+

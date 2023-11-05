@@ -1,0 +1,33 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-dev
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: loic.verniere@icloud.com
+    privateKeySecretRef:
+      name: letsencrypt-dev
+    solvers:
+    - http01:
+       ingress:
+         class: traefik
+         ingressTemplate:
+            metadata:
+              annotations:
+                "traefik.ingress.kubernetes.io/minio-entry-points": "http"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: minio-cert
+  namespace: idemiafoot
+spec:
+  secretName: minio-tls
+  issuerRef:
+    name: letsencrypt-dev
+    kind: ClusterIssuer
+  commonName: s3.dev.foot-idemia.fr
+  dnsNames:
+  - s3.dev.foot-idemia.fr
+

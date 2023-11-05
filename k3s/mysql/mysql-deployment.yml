@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  namespace: idemiafoot
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: idemiafoot
+spec:
+  selector:
+    app: mysql
+  type: ClusterIP
+  ports:
+    - name: mysql-port
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: idemiafoot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+        name: mysql
+    spec:     
+      containers:
+        - name: mysql
+          image: ubuntu/mysql:edge
+          imagePullPolicy: Always
+          ports:
+            - name: mysql
+              containerPort: 3306
+          volumeMounts:  
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "secret"
+            - name: MYSQL_USER
+              value: "soccer"
+            - name: MYSQL_PASSWORD
+              value: "foot12345"
+            - name: MYSQL_DATABASE
+              value: "db-idemiafoot"
+            - name: MYSQL_AUTHENTICATION_PLUGIN
+              value: "caching_sha2_password"
+      
+      volumes:      
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
