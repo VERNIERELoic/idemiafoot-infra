@@ -2,6 +2,7 @@
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white) ![Rancher](https://img.shields.io/badge/rancher-%230075A8.svg?style=for-the-badge&logo=rancher&logoColor=white) ![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white)
 
 | idemiafoot-back status | idemiafoot-front status |
+| --- | --- |
 | ![Argo CD Status](https://argocd.dev.foot-idemia.fr/api/badge?name=idemiafoot-front) | ![Argo CD Status](https://argocd.dev.foot-idemia.fr/api/badge?name=idemiafoot-back) |
 | --- | --- |
 
