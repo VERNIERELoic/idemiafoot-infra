@@ -5,7 +5,7 @@
 
  
 ## ArgoCD 
-![Rancher](/assets/argocd.png)
+#![Rancher](/assets/argocd.png)
 
 ## Prepare your VMs
 
