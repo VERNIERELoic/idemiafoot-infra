@@ -5,7 +5,7 @@
 | idemiafoot-back status | idemiafoot-front status |
 | --- | --- |
 | ![Argo CD Status](https://argocd.dev.foot-idemia.fr/api/badge?name=idemiafoot-front) | ![Argo CD Status](https://argocd.dev.foot-idemia.fr/api/badge?name=idemiafoot-back) |
-| [---](https://dev.foot-idemia.fr/) | --- |
+| [idemiafoot-front](https://dev.foot-idemia.fr/) | [idemiafoot-back](https://api.dev.foot-idemia.fr/ |
 
 
 
