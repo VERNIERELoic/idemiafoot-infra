@@ -4,7 +4,7 @@
 ## Health status
 | idemiafoot-back status | idemiafoot-front status |
 | --- | --- |
-| <img src="https://argocd.dev.foot-idemia.fr/api/badge?name=idemiafoot-front" width="100" height="50"> | <img src="https://argocd.dev.foot-idemia.fr/api/badge?name=idemiafoot-back" width="100" height="50"> |
+| <img src="https://argocd.dev.foot-idemia.fr/api/badge?name=idemiafoot-front" width="100" height="20"> | <img src="https://argocd.dev.foot-idemia.fr/api/badge?name=idemiafoot-back" width="100" height="20"> |
 | [https://dev.foot-idemia.fr](https://dev.foot-idemia.fr) | [https://api.dev.foot-idemia.fr](https://api.dev.foot-idemia.fr) |
 
 
