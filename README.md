@@ -1,7 +1,7 @@
 # Deploy k3s cluster with helm and traefik, argoCD
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white) ![Rancher](https://img.shields.io/badge/rancher-%230075A8.svg?style=for-the-badge&logo=rancher&logoColor=white) ![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white)
 
-![Argo CD Status](https://img.shields.io/endpoint?url=https://argocd.dev.foot-idemia.fr/api/badge?name=idemiafoot-back)
+![Argo CD Status](https://argocd.dev.foot-idemia.fr/api/badge?name=idemiafoot-back)
 
  
 ## ArgoCD 
