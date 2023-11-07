@@ -1,6 +1,9 @@
 # Deploy k3s cluster with helm and traefik
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white) ![Rancher](https://img.shields.io/badge/rancher-%230075A8.svg?style=for-the-badge&logo=rancher&logoColor=white) ![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white)
 
+## ArgoCD 
+![Rancher](/assets/argocd.png)
+
 ## Prepare your VMs
 
 -   Update your system
