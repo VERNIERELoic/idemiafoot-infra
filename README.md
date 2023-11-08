@@ -1,4 +1,4 @@
-# Kubernetes cluster with rancher, longhorn, s3 minIO, helm and traefik, argoCD
+# Kubernetes cluster with rancher, longhorn, s3 minIO, helm, traefik, argoCD
 ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white) ![Rancher](https://img.shields.io/badge/rancher-%230075A8.svg?style=for-the-badge&logo=rancher&logoColor=white) ![Oracle](https://img.shields.io/badge/Oracle-F80000?style=for-the-badge&logo=oracle&logoColor=white)
 
 ## Health status
